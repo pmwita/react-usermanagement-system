@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/react-usermanagement-system/static/css/main.4f4be213.css",
+    "main.js": "/react-usermanagement-system/static/js/main.579603db.js",
+    "index.html": "/react-usermanagement-system/index.html",
+    "main.4f4be213.css.map": "/react-usermanagement-system/static/css/main.4f4be213.css.map",
+    "main.579603db.js.map": "/react-usermanagement-system/static/js/main.579603db.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4f4be213.css",
+    "static/js/main.579603db.js"
+  ]
+}
