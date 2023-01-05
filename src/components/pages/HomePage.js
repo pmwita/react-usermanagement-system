@@ -1,0 +1,173 @@
+import React, {useEffect, useState} from 'react'
+import axios from 'axios';
+import Table from 'react-bootstrap/Table';
+import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
+
+// function HomePage() {
+//   return (
+//     <div>
+      
+//     </div>
+//   )
+// }
+
+const HomePage = () => {
+//creating a users array and its setter method and is empty array by default
+const [users, setUsers] = useState([]); 
+
+const [loading, setLoading] = useState(true);
+
+ //hook allows us do some  operations
+ //make api call on page load
+  // useEffect(()=> {}, []);
+  // useEffect(function(){}, []);
+
+  //called on load of the component on bcoz dependecy array is empty
+  useEffect(()=> {
+    // console.log("on load");
+    // getAllUsers();
+    getAllUserswithAwait ();
+  }, []);
+
+  //another method to do operation synchronously i.e wait for api call for data first then console
+  const getAllUserswithAwait = async () =>{
+   const result = await  axios.get("http://localhost:5000/users");
+   console.log(result);
+
+   //store data as in user
+   setUsers(result.data.reverse());
+   
+   setLoading(false);
+
+   console.log("after axios api call");
+
+  }
+  const deleteUser = async (userId) =>{
+    await axios.delete(`http://localhost:5000/users/${userId}`);
+    getAllUserswithAwait ();
+  }
+
+
+
+  //method to make api call and store data returned in a variable
+  const getAllUsers = ()=>{
+    
+    axios.get("http://localhost:5000/users")
+    //do sth if data is fetched from api successfully
+    .then(function(response){
+      console.log(response.data);
+      //store data as in user
+   setUsers(response.data);
+   
+    })  
+    //do sth if data is not fetched from api successfully or an error
+    .catch(function(error){
+      console.log(error);
+    });
+
+    console.log("after axios api call");
+
+  }
+
+    return (
+      <div className='container'>
+
+  { loading ? <Spinner animation="grow" /> :
+
+<div>
+    <h2 className="py-3">React User Management System</h2>
+        
+    {/* <Table striped bordered hover>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Username</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td colSpan={2}>Larry the Bird</td>
+          <td>@twitter</td>
+        </tr>
+      </tbody>
+    </Table> */}
+        
+        <Table striped bordered hover variant="dark">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+        // //map loops
+        //   users.map((user, index)=> {
+        //   return   <tr key={index}>
+        //     <td>{index + 1}</td>
+        //     <td>{user.name}</td>
+        //     <td>{user.email}</td>
+        //     <td>{user.phone}</td>
+        //   </tr>
+        //   })
+
+
+          //map loops another way without arrow function
+          users.map((user, index)=> (
+             <tr key={index}>
+              <td>{index + 1}</td>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
+              <td>{user.phone}</td>
+              <td>
+                <Link to={`/users/view/${user.id}`}  className="btn btn-info me-2 ">View</Link>
+                <Link to={`/users/edit/${user.id}`}  className="btn btn-outline-info me-2 ">Edit</Link>
+                <Button onClick={() => deleteUser(user.id)} variant="danger">Delete</Button>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+
+    </Table> 
+    </div> }
+
+<div className='container'>
+
+    <h2 className='py-3'>Home Page</h2>
+    <p className='lead'>
+     Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.
+     Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.
+     Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.
+    </p>
+    <p className='lead'>
+     Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.
+     Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.
+     Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.
+    </p>
+  </div>
+
+      </div>
+    )
+  }
+export default HomePage
